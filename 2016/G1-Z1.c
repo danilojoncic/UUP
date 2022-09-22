@@ -1,35 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <limits.h>
 
-int pom(int arg)   // proslijedjivanje po vrijednosti, zato se arg nece globalno mijenjati
-{
-    int lijevaCifra,desnaCifra;
-    int maxRazlika = 0;
-
-    while(arg > 9){ //provjerava da li je to dvocifren broj
-                    //i ako nije ne ulazi u petlju
-        desnaCifra = arg % 10;
-        arg /= 10;
-        lijevaCifra = arg % 10;
-        if(abs(lijevaCifra - desnaCifra) > maxRazlika){
-            maxRazlika = abs(lijevaCifra - desnaCifra);
-        }
-    }
-    return maxRazlika;
-}
+///Unos: 10+13-12+25-5+100
+///Izlaz: 131
+///rad aritmetickih operacija sa karakterima
 
 int main()
 {
-    int pocetak,kraj;
-    scanf("%d%d",&pocetak,&kraj);
-    for(int i = pocetak; i <= kraj;i++){
-        if(pom(i) >= 3){
-            continue;
+   int res = 0;
+   int broj = 0;
+   char ch;
+   char znak;
+
+   while((ch = getchar()) != '\n'){
+        if(ch >= '0' && ch <= '9'){
+            broj = broj * 10 + ch - '0';
         }else{
-            printf("%d ",i);
+            if(res == 0){
+                res += broj;   ///pocetno popunjavanje rezultata
+            }else{
+                if(znak == '+'){     ///forward track za kasnije uslov
+                    res += broj;
+                }else{               ///forward track za kasnije uslov
+                    res -= broj;
+                }
+            }
+            if(ch == '+'){
+                znak = '+';
+            }else{
+                znak = '-';
+            }
+            broj = 0;    /// resetovanje vrijednosti za broj radi ponovnog ucitavanja kasnije
         }
-    }
+   }
+
+   if(znak == '+'){     ///Radi poslijednjih cifara ovo radim
+        res += broj;
+   }else{
+        res -= broj;    ///jer ako se ovo ne uradi, poslijednja cifra (100) nece biti ucitana jer se
+                        ///nalazi pored terminalne nule
+   }
+
+
+   printf("res : %d",res);
 
 
     return 0;
